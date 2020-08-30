@@ -24,3 +24,11 @@ python kagnet_5w1h.py  --language_model xlnet-base-cased   --do_train  --do_lowe
 * ATOMIC (sharing exactly the same form with E-Net) interface is provided
 * XLNet tokenizer is added
 ![.architecture 1.0](https://github.com/gogowhy/ENet_framework/blob/master/images/enet1_0.jpg)
+
+
+
+### Things to do
+
+XLNet for multichoice in this task may be proposed 
+an extraction from wikipedia may be extracted
+attentive feature fusion may be proposed
