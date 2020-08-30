@@ -30,5 +30,7 @@ python kagnet_5w1h.py  --language_model xlnet-base-cased   --do_train  --do_lowe
 ### Things to do
 
 XLNet for multichoice in this task may be proposed 
+
 an extraction from wikipedia may be extracted
+
 attentive feature fusion may be proposed
