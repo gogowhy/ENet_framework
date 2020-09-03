@@ -25,7 +25,9 @@ python kagnet_5w1h.py  --language_model bert-base-uncased   --do_train  --do_low
 * XLNet tokenizer is added
 ![.architecture 1.0](https://github.com/gogowhy/ENet_framework/blob/master/images/enet1_0.jpg)
 
-
+### E-Net framework 1.1
+* Alternative learnable weight is added in the feature fusion part, code is in pytorch_pretrained_bert/modeling.py
+![.architecture 1.0](https://github.com/gogowhy/ENet_framework/blob/master/images/enet1_1.jpg)
 
 ### Things to do
 
