@@ -1114,7 +1114,13 @@ class BertForMultipleChoice(BertPreTrainedModel):
         self.bert = BertModel(config)
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
         self.classifier = nn.Linear(config.hidden_size, 1)
-
+        ######################################################
+        ######################################################
+        # add the learnable weight for two feature fusion
+        self.learned_weight1 = nn.Parameter(torch.FloatTensor(1), requires_grad=True)
+        self.learned_weight2 = nn.Parameter(torch.FloatTensor(1), requires_grad=True)
+        ######################################################
+        ######################################################
         self.mlp_classifier = nn.Sequential(
             nn.Linear(config.hidden_size*2, mlp_hidden_dim * 2),
             nn.BatchNorm1d(mlp_hidden_dim * 2),
@@ -1133,14 +1139,24 @@ class BertForMultipleChoice(BertPreTrainedModel):
         flat_attention_mask = attention_mask.view(-1, attention_mask.size(-1))
         _, pooled_output = self.bert(flat_input_ids, flat_token_type_ids, flat_attention_mask, output_all_encoded_layers=False)
         pooled_output = self.dropout(pooled_output)
-
-
+        ######################################################
+        ######################################################
+        # add the learnable weight for two feature fusion
+        pooled_output = pooled_output*self.learned_weight1
+        ######################################################
+        ######################################################
+        # add the learnable weight for two feature fusion
         exter_flat_input_ids = exter_input_ids.view(-1, input_ids.size(-1))
         exter_flat_token_type_ids = exter_token_type_ids.view(-1, token_type_ids.size(-1))
         exter_flat_attention_mask = exter_attention_mask.view(-1, attention_mask.size(-1))
         _, exter_pooled_output = self.bert(exter_flat_input_ids, exter_flat_token_type_ids, exter_flat_attention_mask,
                                      output_all_encoded_layers=False)
-
+        ######################################################
+        ######################################################
+        # add the learnable weight for two feature fusion                        
+        exter_pooled_output = exter_pooled_output*self.learned_weight2
+        ######################################################
+        ######################################################
         logits = self.mlp_classifier(torch.cat([pooled_output, exter_pooled_output], dim=-1)) 
         reshaped_logits = logits.view(-1, self.num_choices)
 
