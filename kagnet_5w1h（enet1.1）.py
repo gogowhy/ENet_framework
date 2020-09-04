@@ -31,10 +31,8 @@ from pytorch_transformers.tokenization_xlnet import XLNetTokenizer
 
 #############################################################################
 #############################################################################
-# Add the 5w1h extraction
-from enet_tool.get5w1h import get5w1h
-#############################################################################
-#############################################################################
+
+
 
 logging.basicConfig(format = '%(asctime)s - %(levelname)s - %(name)s -   %(message)s',
                     datefmt = '%m/%d/%Y %H:%M:%S',
@@ -295,23 +293,12 @@ def convert_examples_to_features(examples, tokenizer, max_seq_length,
             choices_features.append((tokens, input_ids, input_mask, segment_ids))
         enet_5w1h = []
 
-######################################################################
-######################################################################
-# add the extraction of 5w1h in the triplet
-######################################################################
-###################################################################### 
+
         for triplet in example.enet_5w1h:
-            print("triplet is :")
-            print(triplet)
-            
-            #context_tokens = tokenizer.tokenize(" ".join(triplet))
-            context_tokens = get5w1h(triplet)
-            context_tokens = ' '.join(context_tokens)
-            print("context_tokens is :")
-            print(context_tokens)
-            context_tokens = tokenizer.tokenize(context_tokens)
-       
-            
+            #print("triplet is       :")
+            #print(triplet)
+            context_tokens = tokenizer.tokenize(" ".join(triplet))
+            #print(context_tokens)
             # it outputs single tokenized words
             context_tokens_choice = context_tokens[:]
             #print(context_tokens_choice)
