@@ -32,7 +32,7 @@ def checkverb(sen):
 def fill(tri):
     i = copy.deepcopy(tri)
     if checkarg0(i[2]):
-        return
+        return i
     if i[1] == 'xWant':
         if i[2].split(' ', 1)[0] == 'to':
             i[2] = 'PersonX want ' + i[2]
@@ -74,15 +74,60 @@ def fill(tri):
 ######################################################################
 ######################################################################
     return i
-
-
+def replacebe(s, one):
+    sen = copy.deepcopy(s)
+    for be_verb in [' was ', ' were ', ' am ', ' are ', ' been ', ' be ', ' is ', ' being ']:
+        if be_verb in sen:
+            one[0] = be_verb[1:-1]
+            break
+    if (any(be_verb in sen for be_verb in [' was ', ' were '])):
+        sen = sen.replace(' was ', ' became ')
+        sen = sen.replace(' were ', ' became ')
+    elif (any(be_verb in sen for be_verb in [' am ', ' are ', ' been ', ' be '])):
+        sen = sen.replace(' am ', ' become ')
+        sen = sen.replace(' are ', ' become ')
+        sen = sen.replace(' been ', ' become ')
+        sen = sen.replace(' be ', ' become ')
+    elif ' is ' in sen:
+        sen = sen.replace(' is ', ' becomes ')
+    elif ' being ' in sen:
+        sen = sen.replace(' being ', ' becoming ')
+    return sen
+def replacedo(s, one):
+    sen = copy.deepcopy(s)
+    for be_verb in [' did ', ' does ', ' do ', ' done ', ' doing ']:
+        if be_verb in sen:
+            one[0] = be_verb[1:-1]
+            break
+    if ' did ' in sen:
+        sen = sen.replace(' did ', ' finished ')
+    elif ' does ' in sen:
+        sen = sen.replace(' does ', ' finishes ')
+    elif ' do ' in sen:
+        sen = sen.replace(' do ', ' finish ')
+    elif ' done ' in sen:
+        sen = sen.replace(' done ', ' finished ')
+    elif ' doing ' in sen:
+        sen = sen.replace(' doing ', ' finishing ')
+    return sen
 def srlto5w1h(i):
     comps = []
+    be_flag = False
+    do_flag = False
     p = re.compile(r'\[(.*?)\]', re.S)
     s = predictor.predict(sentence=i)
     one = ['','','','','','','','','False']
     if s['verbs'] == []:
-        return one
+        i = replacedo(i, one)
+        do_flag = True
+        s = predictor.predict(sentence=i)
+        print(i)
+        if s['verbs'] == []:
+            i = replacebe(i, one)
+            be_flag = True
+            s = predictor.predict(sentence=i)
+            if s['verbs'] == []:
+                return one
     comps = re.findall(p, s['verbs'][0]['description'])
     output = []
     for l in comps:
@@ -94,7 +139,7 @@ def srlto5w1h(i):
             one[3] = l.split(' ', 1)[1]
         elif 'ARGM-CAU' in l or 'ARGM-PRP' in l or 'ARGM-MNR' in l or 'ARGM-COM' in l or 'ARGM-EXT' in l:
             one[6] = l.split(' ', 1)[1]
-        elif 'V' in l:
+        elif 'V' in l and not do_flag and not be_flag:
             one[0] = l.split(' ', 1)[1]
         elif 'ARGM-LOC' in l or 'ARG4' in l:
             one[2] = l.split(' ', 1)[1]

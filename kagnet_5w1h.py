@@ -301,14 +301,14 @@ def convert_examples_to_features(examples, tokenizer, max_seq_length,
 ######################################################################
 ###################################################################### 
         for triplet in example.enet_5w1h:
-            print("triplet is :")
-            print(triplet)
+            #print("triplet is :")
+            #print(triplet)
             
             #context_tokens = tokenizer.tokenize(" ".join(triplet))
             context_tokens = get5w1h(triplet)
             context_tokens = ' '.join(context_tokens)
-            print("context_tokens is :")
-            print(context_tokens)
+            #print("context_tokens is :")
+            #print(context_tokens)
             context_tokens = tokenizer.tokenize(context_tokens)
        
             
