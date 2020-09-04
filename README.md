@@ -29,6 +29,10 @@ python kagnet_5w1h.py  --language_model bert-base-uncased   --do_train  --do_low
 * Alternative learnable weight is added in the feature fusion part, code is in pytorch_pretrained_bert/modeling.py
 ![.architecture 1.0](https://github.com/gogowhy/ENet_framework/blob/master/images/enet1_1.jpg)
 
+### E-Net framework 2.0
+* Add the extraction of 5W1H representation in the E-Net framework, code is in enet_tool/get5w1h
+![.architecture 1.0](https://github.com/gogowhy/ENet_framework/blob/master/images/enet2_0.jpg)
+
 ### Things to do
 
 XLNet for multichoice in this task may be proposed 
