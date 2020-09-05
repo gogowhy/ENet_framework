@@ -121,7 +121,7 @@ def srlto5w1h(i):
         i = replacedo(i, one)
         do_flag = True
         s = predictor.predict(sentence=i)
-        print(i)
+        #print(i)
         if s['verbs'] == []:
             i = replacebe(i, one)
             be_flag = True
