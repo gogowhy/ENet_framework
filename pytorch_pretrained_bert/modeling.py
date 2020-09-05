@@ -1173,6 +1173,12 @@ class BertForMultipleChoice(BertPreTrainedModel):
         ######################################################
         ######################################################
         logits = self.mlp_classifier(torch.cat([pooled_output, exter_pooled_output], dim=-1)) 
+        ######################################################
+        ######################################################
+        # Add the attention fusion
+        logits = self.se(logits)
+        ######################################################
+        ######################################################
         reshaped_logits = logits.view(-1, self.num_choices)
 
         if labels is not None:
