@@ -33,6 +33,11 @@ python kagnet_5w1h.py  --language_model bert-base-uncased   --do_train  --do_low
 * Add the extraction of 5W1H representation in the E-Net framework, code is in enet_tool/get5w1h
 ![.architecture 1.0](https://github.com/gogowhy/ENet_framework/blob/master/images/enet2_0.jpg)
 
+### E-Net framework 2.1
+* Inspired by SENet, tried to add the alternative attentive module in feature fusion to improve the performance, code is in pytorch_pretrained_bert/modeling.py and pytorch_pretrained_bert/se_module
+![.architecture 1.0](https://github.com/gogowhy/ENet_framework/blob/master/images/enet2_1.jpg)
+
+
 ### Things to do
 
 XLNet for multichoice in this task may be proposed 
