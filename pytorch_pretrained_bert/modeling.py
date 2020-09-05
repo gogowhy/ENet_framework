@@ -33,6 +33,7 @@ from torch import nn
 from torch.nn import CrossEntropyLoss
 
 from .file_utils import cached_path
+from .se_module.se_module import SELayer
 
 logger = logging.getLogger(__name__)
 
@@ -1121,6 +1122,10 @@ class BertForMultipleChoice(BertPreTrainedModel):
         self.learned_weight2 = nn.Parameter(torch.FloatTensor(1), requires_grad=True)
         ######################################################
         ######################################################
+        # add the attentive feature fusion
+        self.se = SELayer(1,1)
+        ######################################################
+        ######################################################
         self.mlp_classifier = nn.Sequential(
             nn.Linear(config.hidden_size*2, mlp_hidden_dim * 2),
             nn.BatchNorm1d(mlp_hidden_dim * 2),
@@ -1142,7 +1147,12 @@ class BertForMultipleChoice(BertPreTrainedModel):
         ######################################################
         ######################################################
         # add the learnable weight for two feature fusion
-        pooled_output = pooled_output*self.learned_weight1
+
+        #pooled_output = pooled_output*self.learned_weight1
+        ######################################################
+        ######################################################
+        # add the attentive feature fusion
+        pooled_output = self.se(pooled_output)
         ######################################################
         ######################################################
         # add the learnable weight for two feature fusion
@@ -1153,8 +1163,13 @@ class BertForMultipleChoice(BertPreTrainedModel):
                                      output_all_encoded_layers=False)
         ######################################################
         ######################################################
-        # add the learnable weight for two feature fusion                        
-        exter_pooled_output = exter_pooled_output*self.learned_weight2
+        # add the learnable weight for two feature fusion    
+                            
+        #exter_pooled_output = exter_pooled_output*self.learned_weight2
+        ######################################################
+        ######################################################
+        # add the attentive feature fusion
+        exter_pooled_output = self.se(exter_pooled_output)
         ######################################################
         ######################################################
         logits = self.mlp_classifier(torch.cat([pooled_output, exter_pooled_output], dim=-1)) 
